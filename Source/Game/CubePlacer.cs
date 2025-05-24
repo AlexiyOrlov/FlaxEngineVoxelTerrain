@@ -5,7 +5,7 @@ using System.Threading;
 using FlaxEngine;
 using FlaxEngine.Utilities;
 
-namespace Game;
+namespace Game.Game;
 
 public class CubePlacer : Script
 {
@@ -54,11 +54,20 @@ public class CubePlacer : Script
         var vertices = new List<Float3>();
         var triangles =new List<int>();
         var uvs = new List<Float2>();
-        for (int i = 0; i < 6; i++)
-        {
-            AddFaceData(0,0,0,i,vertices,triangles,uvs);
-        }
         List<Float3> normals = new ();
+        for (int x = 0; x < 16; x++)
+        {
+            for (int y = 0; y < 16; y++)
+            {
+                for (int z = 0; z < 16; z++)
+                {
+                    for (int i = 0; i < 6; i++)
+                    {
+                        AddFaceData(x,y,z,i,vertices,triangles,uvs);
+                    }
+                }
+            }
+        }
         mesh.UpdateMesh(vertices.ToArray(), triangles.ToArray(),null,null,uvs.ToArray());
     }
     
