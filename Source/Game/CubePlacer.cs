@@ -55,11 +55,11 @@ public class CubePlacer : Script
         var triangles =new List<int>();
         var uvs = new List<Float2>();
         List<Float3> normals = new ();
-        for (int x = 0; x < 16; x++)
+        for (int x = 0; x < 64; x++)
         {
             for (int y = 0; y < 16; y++)
             {
-                for (int z = 0; z < 16; z++)
+                for (int z = 0; z < 64; z++)
                 {
                     for (int i = 0; i < 6; i++)
                     {
