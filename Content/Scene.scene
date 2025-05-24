@@ -138,11 +138,11 @@
 			}
 		},
 		{
-			"ID": "32764a454ab414ea8895e88107d7175c",
-			"TypeName": "Game.CubePlacer",
+			"ID": "576356914b291ad8aee68ab05e0f2023",
+			"TypeName": "Game.Game.CubePlacer",
 			"ParentID": "877fc23c40fd59efd12ee79358c31975",
 			"V": {
-	"cube": "a0dd012c40f265d0c5b501816b57b377"
+	"Material": "8391b6da40053a988a0959ab9f26f700"
 }
 		}
 	]
