@@ -6,7 +6,7 @@
 
 using System;
 
-namespace SimplexNoise
+namespace Game.Game
 {
     /// <summary>
     /// Implementation of the Perlin simplex noise, an improved Perlin noise algorithm.

@@ -9,6 +9,13 @@ namespace Game.Game;
 
 public class CubePlacer : Script
 {
+    enum VoxelType
+    {
+        Air,
+        Stone,
+        Dirt
+    }
+    
     private Model _model;
     public MaterialBase Material;
     
@@ -17,7 +24,7 @@ public class CubePlacer : Script
     {
         _model = Content.CreateVirtualAsset<Model>();
         _model.SetupLODs([1]);
-        UpdateMesh(_model.LODs[0].Meshes[0]);
+        CreateMesh(_model.LODs[0].Meshes[0]);
 
         // Create or reuse child model
         var childModel = Actor.GetOrAddChild<StaticModel>();
@@ -49,7 +56,7 @@ public class CubePlacer : Script
         Destroy(_model);
     }
 
-    private void UpdateMesh(Mesh mesh)
+    private void CreateMesh(Mesh mesh)
     {
         var vertices = new List<Float3>();
         var triangles =new List<int>();
@@ -61,14 +68,23 @@ public class CubePlacer : Script
             {
                 for (int z = 0; z < 64; z++)
                 {
-                    for (int i = 0; i < 6; i++)
+                    VoxelType voxelType = DetermineVoxelType(x, y, z);
+                    if (voxelType != VoxelType.Air)
                     {
-                        AddFaceData(x,y,z,i,vertices,triangles,uvs);
+                        for (int i = 0; i < 6; i++)
+                        {
+                            AddFaceData(x, y, z, i, vertices, triangles, uvs);
+                        }
                     }
                 }
             }
         }
-        mesh.UpdateMesh(vertices.ToArray(), triangles.ToArray(),null,null,uvs.ToArray());
+        if(vertices.Count>0)
+            mesh.UpdateMesh(vertices.ToArray(), triangles.ToArray(),null,null,uvs.ToArray());
+        else
+        {
+            Debug.Log("No vertices");
+        }
     }
     
     private void AddFaceData(int x, int y, int z, int faceIndex,List<Float3> vertices,List<int> triangles,List<Float2> uvs)
@@ -167,4 +183,17 @@ public class CubePlacer : Script
         triangles.Add(vertCount - 1);
     }
 
+    VoxelType DetermineVoxelType(int x, int y, int z)
+    {
+        float noise = Noise.CalcPixel3D(x, y, z, 0.03f);
+        switch (noise)
+        {
+            case var f when f< 64:
+                return VoxelType.Stone;
+            case var f when f < 196:
+                return VoxelType.Dirt;
+            default:
+                return VoxelType.Air;
+        }
+    }
 }
