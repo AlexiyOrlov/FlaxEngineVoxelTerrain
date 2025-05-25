@@ -140,14 +140,14 @@
 			}
 		},
 		{
-			"ID": "576356914b291ad8aee68ab05e0f2023",
-			"TypeName": "Game.Game.CubePlacer",
+			"ID": "37b69f8e448648829601b4a0a7a36e9f",
+			"TypeName": "Game.Game.World",
 			"ParentID": "877fc23c40fd59efd12ee79358c31975",
 			"V": {
 	"StoneMaterial": "382f1ae946c519eff6e6f3a2965cf56b",
 	"GrassMaterial": "8391b6da40053a988a0959ab9f26f700",
-	"ChunksX": 16,
-	"ChunksZ": 16,
+	"ChunksX": 8,
+	"ChunksZ": 8,
 	"Player": "b0d72c3746caebca055e1f921ca21c7c",
 	"ChunkLoadRange": 2
 }
