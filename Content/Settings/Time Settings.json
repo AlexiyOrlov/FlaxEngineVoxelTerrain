@@ -5,7 +5,7 @@
 	"Data": {
 	"UpdateFPS": 60.0,
 	"PhysicsFPS": 60.0,
-	"DrawFPS": 300.0,
+	"DrawFPS": 60.0,
 	"TimeScale": 1.0,
 	"MaxUpdateDeltaTime": 0.1
 }
