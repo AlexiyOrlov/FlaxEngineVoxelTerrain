@@ -15,14 +15,15 @@ public class CubePlacer : Script
 
     public const int ChunkHeight = 16;
     public static CubePlacer Instance;
+    public int ChunksX, ChunksZ;
     
     /// <inheritdoc/>
     public override void OnStart()
     {
         Instance = this;
-        for (int x = 0; x<2; x++)
+        for (int x = 0; x<ChunksX; x++)
         {
-            for (int z = 0; z < 2; z++)
+            for (int z = 0; z < ChunksZ; z++)
             {
                 for (int y = 0; y < 1; y++)
                 {
