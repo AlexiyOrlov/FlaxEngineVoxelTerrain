@@ -25,7 +25,7 @@ public class World : Script
     [Tooltip("In chunks")]
     public int WorldHeight = 4;
     private bool _runGenerationThread = true;
-    private long _genThreadLabel;
+    private long _genThreadLabel=-1;
     
     /// <inheritdoc/>
     public override void OnStart()
@@ -40,6 +40,21 @@ public class World : Script
                 UnloadChunksAround(playerChunkPosition);
             }
         });
+        // MakeChunksTest(PosToChunkCoordinate(Player.Position));
+    }
+
+    private void MakeChunksTest(Int3 at)
+    {
+        for (int i = 0; i < ChunksX; i++)
+        {
+            for (int j = 0; j < ChunksZ; j++)
+            {
+                for (int k = 0; k < WorldHeight; k++)
+                {
+                    CreateChunk(at,i,k,j);
+                }
+            }
+        }
     }
     
     /// <inheritdoc/>
@@ -71,17 +86,22 @@ public class World : Script
                 {
                     for (int cy = 0; cy <= WorldHeight; cy++)
                     {
-                        Int3 chunkPosition = new Int3(position.X + cx, Mathf.Clamp(position.Y + cy, 0, WorldHeight),
-                            position.Z + cz);
-                        if (!_chunks.ContainsKey(chunkPosition))
-                        {
-                            Chunk chunk = new Chunk(chunkPosition);
-                            chunk.Initialize(Actor);
-                            _chunks.TryAdd(chunkPosition, chunk);
-                        }
+                        CreateChunk(position, cx, cy, cz);
                     }
                 }
             }
+        }
+    }
+
+    private void CreateChunk(Int3 position, int cx, int cy, int cz)
+    {
+        Int3 chunkPosition = new Int3(position.X + cx, Mathf.Clamp(position.Y + cy, 0, WorldHeight),
+            position.Z + cz);
+        if (!_chunks.ContainsKey(chunkPosition))
+        {
+            Chunk chunk = new Chunk(chunkPosition);
+            chunk.Initialize(Actor);
+            _chunks.TryAdd(chunkPosition, chunk);
         }
     }
 
@@ -97,7 +117,8 @@ public class World : Script
     public override void OnDestroy()
     {
         _runGenerationThread = false;
-        JobSystem.Wait(_genThreadLabel);
+        if(_genThreadLabel!=-1)
+            JobSystem.Wait(_genThreadLabel);
         _chunks.ForEach(pair => pair.Value.Models.ForEach(model => Destroy(model)));
     }
 
