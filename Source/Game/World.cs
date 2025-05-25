@@ -62,6 +62,7 @@ public class World : Script
 
     private void LoadChunksAround(Int3 position)
     {
+        //parallelization is slow here
         for (int cx = -ChunkLoadRange; cx <= ChunkLoadRange; cx++)
         {
             for (int cz = -ChunkLoadRange; cz <= ChunkLoadRange; cz++)
