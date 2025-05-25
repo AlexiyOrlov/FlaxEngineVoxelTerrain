@@ -37,12 +37,15 @@ public class FreeCamera : Script
 
         var inputH = Input.GetAxis("Horizontal");
         var inputV = Input.GetAxis("Vertical");
-        var move = new Vector3(inputH, 0.0f, inputV);
+        var jump=Input.GetAxis("VerticalMove");
+        Vector3 move= new Vector3(inputH,-jump, inputV);
+            
         move.Normalize();
         move = camTrans.TransformDirection(move);
 
-        camTrans.Translation += move * MoveSpeed;
-
         Actor.Transform = camTrans;
+        var actorTrans = Actor.Transform;
+        actorTrans.Translation+=move*MoveSpeed;
+        Actor.Transform = actorTrans;
     }
 }
