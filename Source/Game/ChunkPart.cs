@@ -7,16 +7,14 @@ namespace Game.Game
     {
         public List<Float3> vertices;
         public List<int> triangles ;
-        public List<Vector2> uvs ;
+        public List<Float2> uvs ;
         // public  Voxel[,,] voxels;
-        // public VoxelType voxelType;
 
         public ChunkPart()
         {
-            // voxelType = type;
             vertices = new List<Float3>();
             triangles = new List<int>();
-            uvs = new List<Vector2>();
+            uvs = new List<Float2>();
             // voxels = new Voxel[World.Instance.chunkSize, World.Instance.chunkSize, World.Instance.chunkSize];
         }
     }

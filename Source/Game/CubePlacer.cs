@@ -24,15 +24,47 @@ public class CubePlacer : Script
     /// <inheritdoc/>
     public override void OnStart()
     {
-        var model = Content.CreateVirtualAsset<Model>();
-        model.SetupLODs([1]);
-        CreateMesh(model.LODs[0].Meshes[0]);
-
-        var childModel = Actor.GetOrAddChild<StaticModel>();
-        childModel.Model = model;
-        childModel.LocalScale = new Float3(100);
-        childModel.SetMaterial(0, GrassMaterial);
-        models.Add(model);
+        for (int x = 0; x < 64; x++)
+        {
+            for (int y = 0; y < 16; y++)
+            {
+                for (int z = 0; z < 64; z++)
+                {
+                    VoxelType voxelType=DetermineVoxelType(x,y,z);
+                    if(voxelType!=VoxelType.Air)
+                    {
+                        ChunkPart chunkPart=chunkParts.GetOrAdd(voxelType,new ChunkPart());
+                        for (int fIndex = 0; fIndex < 6; fIndex++)
+                        {
+                            AddFaceData(x, y, z, fIndex, chunkPart.vertices, chunkPart.triangles, chunkPart.uvs);
+                        }
+                    }
+                }
+            }
+        }
+        
+        foreach (var chunkPart in chunkParts)
+        {
+            Actor actor = new EmptyActor();
+            var model = Content.CreateVirtualAsset<Model>();
+            model.SetupLODs([1]);
+            model.LODs[0].Meshes[0].UpdateMesh(chunkPart.Value.vertices,chunkPart.Value.triangles,null,null,chunkPart.Value.uvs);
+            var childModel = actor.GetOrAddChild<StaticModel>();
+            childModel.Model = model;
+            childModel.LocalScale = new Float3(100);
+            switch (chunkPart.Key)
+            {
+                case VoxelType.Stone:
+                    childModel.SetMaterial(0, StoneMaterial);
+                    break;    
+                case VoxelType.Dirt:
+                    childModel.SetMaterial(0, GrassMaterial);
+                    break;
+            }
+            models.Add(model);
+            actor.Parent = Actor;
+            actor.Name=chunkPart.Key.ToString();
+        }
     }
     
     /// <inheritdoc/>
@@ -58,47 +90,8 @@ public class CubePlacer : Script
         models.ForEach(model => Destroy(model));
     }
 
-    private void CreateMesh(Mesh mesh)
-    {
-        var vertices = new List<Float3>();
-        var triangles =new List<int>();
-        var uvs = new List<Float2>();
-        List<Float3> normals = new ();
-        for (int x = 0; x < 64; x++)
-        {
-            for (int y = 0; y < 16; y++)
-            {
-                for (int z = 0; z < 64; z++)
-                {
-                    VoxelType voxelType = DetermineVoxelType(x, y, z);
-                    if (voxelType != VoxelType.Air)
-                    {
-                        for (int i = 0; i < 6; i++)
-                        {
-                            AddFaceData(x, y, z, i, vertices, triangles, uvs);
-                        }
-                    }
-                }
-            }
-        }
-        if(vertices.Count>0)
-            mesh.UpdateMesh(vertices.ToArray(), triangles.ToArray(),null,null,uvs.ToArray());
-        else
-        {
-            Debug.Log("No vertices");
-        }
-    }
-    
     private void AddFaceData(int x, int y, int z, int faceIndex,List<Float3> vertices,List<int> triangles,List<Float2> uvs)
     {
-        // Based on faceIndex, determine vertices and triangles
-        // Add vertices and triangles for the visible face
-        // Calculate and add corresponding UVs
-        // float3 pos=new float3(x,y,z);
-        // ChunkPart chunkPart=positionToChunkParts[pos];
-        // x+=(int)position.x;
-        // y+=(int)position.y;
-        // z+=(int)position.z;
         if (faceIndex == 0) // Top Face
         {
             vertices.Add(new Float3(x,     y + 1, z    ));
@@ -190,9 +183,9 @@ public class CubePlacer : Script
         float noise = Noise.CalcPixel3D(x, y, z, 0.03f);
         switch (noise)
         {
-            case var f when f< 64:
+            case < 64:
                 return VoxelType.Stone;
-            case var f when f < 196:
+            case < 196:
                 return VoxelType.Dirt;
             default:
                 return VoxelType.Air;
