@@ -146,11 +146,11 @@
 			"V": {
 	"StoneMaterial": "382f1ae946c519eff6e6f3a2965cf56b",
 	"GrassMaterial": "8391b6da40053a988a0959ab9f26f700",
-	"ChunkHeight": 256,
 	"ChunksX": 8,
 	"ChunksZ": 8,
 	"Player": "b0d72c3746caebca055e1f921ca21c7c",
-	"WorldHeight": 1
+	"ChunkLoadRange": 8,
+	"WorldHeight": 2
 }
 		},
 		{
@@ -158,13 +158,6 @@
 			"PrefabID": "a0dd012c40f265d0c5b501816b57b377",
 			"PrefabObjectID": "8663f0634f56923b66546ab45b7cb560",
 			"ParentID": "74a68a984824b4510d12589f199ad68f",
-			"Transform": {
-				"Translation": {
-					"X": -127.34286499023438,
-					"Y": 50.0,
-					"Z": -120.44911193847656
-				}
-			},
 			"Buffer": {
 				"Entries": [
 					{
