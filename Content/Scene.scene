@@ -123,7 +123,7 @@
 			"TypeName": "FreeCamera",
 			"ParentID": "b0d72c3746caebca055e1f921ca21c7c",
 			"V": {
-	"MoveSpeed": 12.0
+	"MoveSpeed": 24.0
 }
 		},
 		{
