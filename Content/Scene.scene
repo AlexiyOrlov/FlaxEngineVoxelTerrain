@@ -144,8 +144,35 @@
 			"TypeName": "Game.Game.CubePlacer",
 			"ParentID": "877fc23c40fd59efd12ee79358c31975",
 			"V": {
-	"Material": "8391b6da40053a988a0959ab9f26f700"
+	"StoneMaterial": "382f1ae946c519eff6e6f3a2965cf56b",
+	"GrassMaterial": "8391b6da40053a988a0959ab9f26f700"
 }
+		},
+		{
+			"ID": "0bb014a74c40973c8e42fba8b8277043",
+			"PrefabID": "a0dd012c40f265d0c5b501816b57b377",
+			"PrefabObjectID": "8663f0634f56923b66546ab45b7cb560",
+			"ParentID": "74a68a984824b4510d12589f199ad68f",
+			"Transform": {
+				"Translation": {
+					"X": 2.9182281494140625,
+					"Y": 50.0,
+					"Z": 44.83210372924805
+				}
+			},
+			"Buffer": {
+				"Entries": [
+					{
+						"Material": "382f1ae946c519eff6e6f3a2965cf56b"
+					}
+				]
+			}
+		},
+		{
+			"ID": "2a31edfa40c6c0263326c49b94c1e9d9",
+			"PrefabID": "a0dd012c40f265d0c5b501816b57b377",
+			"PrefabObjectID": "2babb9724f8f3c3d6f27d39148f829b2",
+			"ParentID": "0bb014a74c40973c8e42fba8b8277043"
 		}
 	]
 }

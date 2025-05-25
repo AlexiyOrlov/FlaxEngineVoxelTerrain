@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
@@ -16,21 +17,22 @@ public class CubePlacer : Script
         Dirt
     }
     
-    private Model _model;
-    public MaterialBase Material;
+    public MaterialBase StoneMaterial,GrassMaterial;
+    ConcurrentDictionary<VoxelType,ChunkPart> chunkParts = new ConcurrentDictionary<VoxelType, ChunkPart>();
+    List<Model> models = new List<Model>();
     
     /// <inheritdoc/>
     public override void OnStart()
     {
-        _model = Content.CreateVirtualAsset<Model>();
-        _model.SetupLODs([1]);
-        CreateMesh(_model.LODs[0].Meshes[0]);
+        var model = Content.CreateVirtualAsset<Model>();
+        model.SetupLODs([1]);
+        CreateMesh(model.LODs[0].Meshes[0]);
 
-        // Create or reuse child model
         var childModel = Actor.GetOrAddChild<StaticModel>();
-        childModel.Model = _model;
+        childModel.Model = model;
         childModel.LocalScale = new Float3(100);
-        childModel.SetMaterial(0, Material);
+        childModel.SetMaterial(0, GrassMaterial);
+        models.Add(model);
     }
     
     /// <inheritdoc/>
@@ -53,7 +55,7 @@ public class CubePlacer : Script
 
     public override void OnDestroy()
     {
-        Destroy(_model);
+        models.ForEach(model => Destroy(model));
     }
 
     private void CreateMesh(Mesh mesh)
