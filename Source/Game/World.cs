@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
+using System.Threading.Tasks;
 using FlaxEngine;
 using FlaxEngine.Utilities;
 
@@ -78,19 +79,22 @@ public class World : Script
     private void LoadChunksAround(Int3 position)
     {
         //parallelization is slow here
-        for (int cx = -ChunkLoadRange; cx <= ChunkLoadRange; cx++)
-        {
-            for (int cz = -ChunkLoadRange; cz <= ChunkLoadRange; cz++)
+        // Parallel.For(-ChunkLoadRange, ChunkLoadRange, cx =>
+        // {
+            for (int cx = -ChunkLoadRange; cx <= ChunkLoadRange; cx++)
             {
-                if (_runGenerationThread)
+                for (int cz = -ChunkLoadRange; cz <= ChunkLoadRange; cz++)
                 {
-                    for (int cy = 0; cy <= WorldHeight; cy++)
+                    if (_runGenerationThread)
                     {
-                        CreateChunk(position, cx, cy, cz);
+                        for (int cy = 0; cy <= WorldHeight; cy++)
+                        {
+                            CreateChunk(position, cx, cy, cz);
+                        }
                     }
                 }
             }
-        }
+        // });
     }
 
     private void CreateChunk(Int3 position, int cx, int cy, int cz)

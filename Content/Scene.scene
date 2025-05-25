@@ -149,7 +149,6 @@
 	"ChunksX": 16,
 	"ChunksZ": 16,
 	"Player": "b0d72c3746caebca055e1f921ca21c7c",
-	"ChunkLoadRange": 4,
 	"WorldHeight": 1
 }
 		},
