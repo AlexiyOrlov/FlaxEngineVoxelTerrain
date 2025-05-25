@@ -24,10 +24,10 @@ public class Chunk
         {
             for (int z = 0; z < 16; z++)
             {
-                for (int y = 0; y < World.ChunkHeight; y++)
+                for (int y = 0; y < World.Instance.ChunkHeight; y++)
                 {
-                    Int3 voxelPosition =new Int3(_position.X * 16 + x, _position.Y * World.ChunkHeight + y, _position.Z * 16 + z);
-                    float heightNoise=Noise.CalcPixel2D(voxelPosition.X,voxelPosition.Z,0.02f)/256*World.ChunkHeight;
+                    Int3 voxelPosition =new Int3(_position.X * 16 + x, _position.Y * World.Instance.ChunkHeight + y, _position.Z * 16 + z);
+                    float heightNoise=Noise.CalcPixel2D(voxelPosition.X,voxelPosition.Z,0.02f)/256*World.Instance.ChunkHeight;
                     VoxelType voxelType=DetermineVoxelType(voxelPosition.X,voxelPosition.Y,voxelPosition.Z,heightNoise);
                     
                     voxelTypes.TryAdd(new Int3(x,y,z),voxelType);
@@ -37,12 +37,12 @@ public class Chunk
 
         for (int xInChunk = 0; xInChunk < 16; xInChunk++)
         {
-            for (int yInChunk = 0; yInChunk < World.ChunkHeight; yInChunk++)
+            for (int yInChunk = 0; yInChunk < World.Instance.ChunkHeight; yInChunk++)
             {
                 for (int zInChunk = 0; zInChunk < 16; zInChunk++)
                 {
                     VoxelType voxelType = voxelTypes[new Int3(xInChunk, yInChunk, zInChunk)];
-                    Int3 voxelPosition =new Int3(_position.X * 16 + xInChunk, _position.Y * World.ChunkHeight + yInChunk, _position.Z * 16 + zInChunk);
+                    Int3 voxelPosition =new Int3(_position.X * 16 + xInChunk, _position.Y * World.Instance.ChunkHeight + yInChunk, _position.Z * 16 + zInChunk);
                     if(voxelType!=VoxelType.Air)
                     {
                         ChunkPart chunkPart=ChunkParts.GetOrAdd(voxelType,new ChunkPart());
@@ -96,7 +96,7 @@ public class Chunk
     
     bool IsAir(int x, int y, int z)
     {
-        if (x < 0 || x > 15 || y < 0 || y > World.ChunkHeight-1 || z < 0 || z > 15)
+        if (x < 0 || x > 15 || y < 0 || y > World.Instance.ChunkHeight-1 || z < 0 || z > 15)
         {
             //TODO fix
             // Float3 globalPosition = new Float3(position.X + x, position.Y + y, position.Z + z);
