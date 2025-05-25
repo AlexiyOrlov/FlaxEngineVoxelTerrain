@@ -44,9 +44,19 @@ public class Chunk
                     if(voxelType!=VoxelType.Air)
                     {
                         ChunkPart chunkPart=ChunkParts.GetOrAdd(voxelType,new ChunkPart());
+                        bool[] facesVisible = new bool[6];
+
+                        // Check visibility for each face
+                        facesVisible[0] = IsAir(xInChunk, yInChunk + 1, zInChunk); // Top
+                        facesVisible[1] = IsAir(xInChunk, yInChunk - 1, zInChunk); // Bottom
+                        facesVisible[2] = IsAir(xInChunk - 1, yInChunk, zInChunk); // Left
+                        facesVisible[3] = IsAir(xInChunk + 1, yInChunk, zInChunk); // Right
+                        facesVisible[4] = IsAir(xInChunk, yInChunk, zInChunk + 1); // Front
+                        facesVisible[5] = IsAir(xInChunk, yInChunk, zInChunk - 1); // Back
                         for (int fIndex = 0; fIndex < 6; fIndex++)
                         {
-                            AddFaceData(voxelPosition.X,voxelPosition.Y,voxelPosition.Z, fIndex, chunkPart.vertices, chunkPart.triangles, chunkPart.uvs);
+                            if(facesVisible[fIndex])
+                                AddFaceData(voxelPosition.X,voxelPosition.Y,voxelPosition.Z, fIndex, chunkPart.vertices, chunkPart.triangles, chunkPart.uvs);
                         }
                     }
                 }
@@ -75,6 +85,13 @@ public class Chunk
             actor.Parent = parent;
             actor.Name=chunkPart.Key.ToString();
         }
+    }
+
+    bool IsAir(int x, int y, int z)
+    {
+        if(x<0 || x>15 || y<0 || y>15 || z<0 || z>15)
+            return true; //TODO check nearby chunk
+        return voxelTypes[new Int3(x,y,z)]==VoxelType.Air;
     }
     
     VoxelType DetermineVoxelType(int x, int y, int z)
