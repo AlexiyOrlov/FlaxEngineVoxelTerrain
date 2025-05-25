@@ -149,7 +149,7 @@
 	"ChunksX": 8,
 	"ChunksZ": 8,
 	"Player": "b0d72c3746caebca055e1f921ca21c7c",
-	"ChunkLoadRange": 2
+	"ChunkLoadRange": 8
 }
 		},
 		{
