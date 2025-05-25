@@ -64,7 +64,7 @@ public class CubePlacer : Script
 
     public Int3 PosToChunkCoordinate(Float3 pos)
     {
-        return new Int3(Mathf.FloorToInt(pos.X / 16f), 0, Mathf.FloorToInt(pos.Z / 16f));
+        return new Int3(Mathf.FloorToInt(pos.X / 16f), Mathf.FloorToInt(pos.Y/ChunkHeight), Mathf.FloorToInt(pos.Z / 16f));
     }
 
     public Chunk GetChunkAt(Float3 globalPosition)
