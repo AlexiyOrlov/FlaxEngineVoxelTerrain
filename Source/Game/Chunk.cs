@@ -9,6 +9,7 @@ public class Chunk
     Int3 position;
     public List<Model> models = new List<Model>();
     public ConcurrentDictionary<VoxelType,ChunkPart> ChunkParts = new ConcurrentDictionary<VoxelType, ChunkPart>();
+    private ConcurrentDictionary<Int3, VoxelType> voxelTypes = new();
 
     public Chunk(Int3 position)
     {
@@ -17,6 +18,7 @@ public class Chunk
 
     public void Initialize(Actor parent)
     {
+        //generate voxel types
         for (int x = 0; x < 16; x++)
         {
             for (int y = 0; y < CubePlacer.ChunkHeight; y++)
@@ -25,6 +27,20 @@ public class Chunk
                 {
                     Int3 voxelPosition =new Int3(position.X * 16 + x, position.Y * CubePlacer.ChunkHeight + y, position.Z * 16 + z);
                     VoxelType voxelType=DetermineVoxelType(voxelPosition.X,voxelPosition.Y,voxelPosition.Z);
+                    
+                    voxelTypes.TryAdd(new Int3(x,y,z),voxelType);
+                }
+            }
+        }
+
+        for (int xInChunk = 0; xInChunk < 16; xInChunk++)
+        {
+            for (int yInChunk = 0; yInChunk < CubePlacer.ChunkHeight; yInChunk++)
+            {
+                for (int zInChunk = 0; zInChunk < 16; zInChunk++)
+                {
+                    VoxelType voxelType = voxelTypes[new Int3(xInChunk, yInChunk, zInChunk)];
+                    Int3 voxelPosition =new Int3(position.X * 16 + xInChunk, position.Y * CubePlacer.ChunkHeight + yInChunk, position.Z * 16 + zInChunk);
                     if(voxelType!=VoxelType.Air)
                     {
                         ChunkPart chunkPart=ChunkParts.GetOrAdd(voxelType,new ChunkPart());
