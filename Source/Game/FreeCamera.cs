@@ -30,22 +30,15 @@ public class FreeCamera : Script
 
     public override void OnFixedUpdate()
     {
-        var camTrans = Actor.Transform;
-        var camFactor = Mathf.Saturate(CameraSmoothing * Time.DeltaTime);
-
-        camTrans.Orientation = Quaternion.Lerp(camTrans.Orientation, Quaternion.Euler(pitch, yaw, 0), camFactor);
-
         var inputH = Input.GetAxis("Horizontal");
         var inputV = Input.GetAxis("Vertical");
         var jump=Input.GetAxis("VerticalMove");
-        Vector3 move= new Vector3(inputH,-jump, inputV);
-            
-        move.Normalize();
-        move = camTrans.TransformDirection(move);
-
-        Actor.Transform = camTrans;
-        var actorTrans = Actor.Transform;
-        actorTrans.Translation+=move*MoveSpeed;
-        Actor.Transform = actorTrans;
+        
+        Vector3 move= new Vector3(inputH,-jump, inputV)*MoveSpeed;
+        var actorTransform=Actor.Transform;
+        actorTransform.Orientation=Quaternion.Euler(pitch,yaw,0);
+        var vecTransformed=actorTransform.TransformDirection(move);
+        actorTransform.Translation+=vecTransformed;
+        Actor.Transform=actorTransform;
     }
 }
