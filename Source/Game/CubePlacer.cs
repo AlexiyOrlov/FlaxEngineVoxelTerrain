@@ -20,13 +20,15 @@ public class CubePlacer : Script
     public MaterialBase StoneMaterial,GrassMaterial;
     ConcurrentDictionary<VoxelType,ChunkPart> chunkParts = new ConcurrentDictionary<VoxelType, ChunkPart>();
     List<Model> models = new List<Model>();
+
+    private const int ChunkHeight = 16;
     
     /// <inheritdoc/>
     public override void OnStart()
     {
         for (int x = 0; x < 128; x++)
         {
-            for (int y = 0; y < 16; y++)
+            for (int y = 0; y < ChunkHeight; y++)
             {
                 for (int z = 0; z < 128; z++)
                 {
