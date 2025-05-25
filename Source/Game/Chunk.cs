@@ -10,6 +10,7 @@ public class Chunk
     public List<Model> Models = new List<Model>();
     public ConcurrentDictionary<VoxelType,ChunkPart> ChunkParts = new ConcurrentDictionary<VoxelType, ChunkPart>();
     private ConcurrentDictionary<Int3, VoxelType> voxelTypes = new();
+    public List<Actor> Actors = new List<Actor>();
 
     public Chunk(Int3 position)
     {
@@ -87,6 +88,7 @@ public class Chunk
                     Models.Add(model);
                     actor.Parent = parent;
                     actor.Name=chunkPart.Key.ToString();
+                    Actors.Add(actor);
             }
         });
     }

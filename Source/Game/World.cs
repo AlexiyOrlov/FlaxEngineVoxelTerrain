@@ -30,31 +30,6 @@ public class World : Script
     public override void OnStart()
     {
         Instance = this;
-        // for (int x = 0; x<ChunksX; x++)
-        // {
-        //     for (int z = 0; z < ChunksZ; z++)
-        //     {
-        //         for (int y = 0; y < 1; y++)
-        //         {
-        //             var position = new Int3(x,y,z);
-        //             Chunk chunk = new Chunk(position);
-        //             chunk.Initialize(Actor);
-        //
-        //             chunks.TryAdd(position,chunk);
-        //         }
-        //     }
-        // }
-        
-        
-        // var next=new Int3(1,0,0);
-        // var nextChunk=new Chunk(next);
-        // nextChunk.Initialize(Actor);
-        // chunks.TryAdd(next,nextChunk);
-        //
-        // var last = new Int3(1, 0, 1);
-        // var lastChunk=new Chunk(last);
-        // lastChunk.Initialize(Actor);
-        // chunks.TryAdd(last,lastChunk);
 
         JobSystem.Dispatch(arg0 =>
         {
@@ -62,6 +37,7 @@ public class World : Script
             {
                 var playerChunkPosition = PosToChunkCoordinate(Player.Position);
                 LoadChunksAround(playerChunkPosition);
+                UnloadChunksAround(playerChunkPosition);
             }
         });
     }
@@ -101,6 +77,16 @@ public class World : Script
                     }
                 }
             }
+        }
+    }
+
+    private void UnloadChunksAround(Int3 position)
+    {
+        foreach (var keyValuePair in _chunks)
+        {
+            Int3 chunkPosition = keyValuePair.Key;
+            var distanceSquared = Float3.DistanceSquared(new Float3(chunkPosition.X,chunkPosition.Y,chunkPosition.Z), new Float3(position.X,position.Y,position.Z));
+            
         }
     }
 
