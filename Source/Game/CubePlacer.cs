@@ -15,7 +15,11 @@ public class CubePlacer : Script
 
     public const int ChunkHeight = 16;
     public static CubePlacer Instance;
-    public int ChunksX, ChunksZ;
+    [Tooltip("Generate N chunks along X")]
+    public int ChunksX;
+    [Tooltip("Generate N chunks along Z")]
+    public int ChunksZ;
+    public Actor Player;
     
     /// <inheritdoc/>
     public override void OnStart()
