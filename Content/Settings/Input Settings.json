@@ -83,7 +83,7 @@
 			"Snap": false
 		},
 		{
-			"Name": "Horizontal",
+			"Name": "X",
 			"Axis": 9,
 			"Gamepad": 0,
 			"PositiveButton": 68,
@@ -97,7 +97,7 @@
 			"Snap": true
 		},
 		{
-			"Name": "Vertical",
+			"Name": "Z",
 			"Axis": 9,
 			"Gamepad": 0,
 			"PositiveButton": 87,
@@ -111,7 +111,7 @@
 			"Snap": true
 		},
 		{
-			"Name": "Horizontal",
+			"Name": "X",
 			"Axis": 9,
 			"Gamepad": 0,
 			"PositiveButton": 39,
@@ -125,7 +125,7 @@
 			"Snap": true
 		},
 		{
-			"Name": "Vertical",
+			"Name": "Z",
 			"Axis": 9,
 			"Gamepad": 0,
 			"PositiveButton": 38,
@@ -139,7 +139,7 @@
 			"Snap": true
 		},
 		{
-			"Name": "Horizontal",
+			"Name": "X",
 			"Axis": 3,
 			"Gamepad": 0,
 			"PositiveButton": 0,
@@ -153,7 +153,7 @@
 			"Snap": false
 		},
 		{
-			"Name": "Vertical",
+			"Name": "Z",
 			"Axis": 4,
 			"Gamepad": 0,
 			"PositiveButton": 0,
@@ -195,7 +195,7 @@
 			"Snap": false
 		},
 		{
-			"Name": "VerticalMove",
+			"Name": "Y",
 			"Axis": 6,
 			"Gamepad": 0,
 			"PositiveButton": 32,

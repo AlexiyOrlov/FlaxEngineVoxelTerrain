@@ -30,9 +30,9 @@ public class FreeCamera : Script
 
     public override void OnFixedUpdate()
     {
-        var inputH = Input.GetAxis("Horizontal");
-        var inputV = Input.GetAxis("Vertical");
-        var jump=Input.GetAxis("VerticalMove");
+        var inputH = Input.GetAxis("X");
+        var inputV = Input.GetAxis("Z");
+        var jump=Input.GetAxis("Y");
         
         Vector3 move= new Vector3(inputH*MoveSpeed,-jump*MoveSpeed/2, inputV*MoveSpeed);
         var actorTransform=Actor.Transform;
