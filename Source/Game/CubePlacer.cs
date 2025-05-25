@@ -24,6 +24,7 @@ public class CubePlacer : Script
     public int ChunkLoadRange = 16;
     [Tooltip("In chunks")]
     public int WorldHeight = 4;
+    private bool runGenerationThread = true;
     
     /// <inheritdoc/>
     public override void OnStart()
@@ -54,6 +55,15 @@ public class CubePlacer : Script
         // var lastChunk=new Chunk(last);
         // lastChunk.Initialize(Actor);
         // chunks.TryAdd(last,lastChunk);
+
+        JobSystem.Dispatch(arg0 =>
+        {
+            while (runGenerationThread)
+            {
+                var playerChunkPosition = PosToChunkCoordinate(Player.Position);
+                LoadChunksAround(playerChunkPosition);
+            }
+        });
     }
     
     /// <inheritdoc/>
@@ -71,8 +81,7 @@ public class CubePlacer : Script
     /// <inheritdoc/>
     public override void OnUpdate()
     {
-        var playerChunkPosition = PosToChunkCoordinate(Player.Position);
-        LoadChunksAround(playerChunkPosition);
+        
     }
 
     private void LoadChunksAround(Int3 position)
@@ -97,11 +106,9 @@ public class CubePlacer : Script
 
     public override void OnDestroy()
     {
+        runGenerationThread = false;
         chunks.ForEach(pair => pair.Value.models.ForEach(model => Destroy(model)));
     }
-
-
-    
 
     public Int3 PosToChunkCoordinate(Float3 pos)
     {

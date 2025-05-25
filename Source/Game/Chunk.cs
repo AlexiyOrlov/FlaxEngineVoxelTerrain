@@ -63,28 +63,32 @@ public class Chunk
             }
         }
         
-        foreach (var chunkPart in ChunkParts)
+        Scripting.InvokeOnUpdate(() =>
         {
-            Actor actor = new EmptyActor();
-            var model = Content.CreateVirtualAsset<Model>();
-            model.SetupLODs([1]);
-            model.LODs[0].Meshes[0].UpdateMesh(chunkPart.Value.vertices,chunkPart.Value.triangles,null,null,chunkPart.Value.uvs);
-            var childModel = actor.GetOrAddChild<StaticModel>();
-            childModel.Model = model;
-            childModel.LocalScale = new Float3(100);
-            switch (chunkPart.Key)
+            foreach (var chunkPart in ChunkParts)
             {
-                case VoxelType.Stone:
-                    childModel.SetMaterial(0, CubePlacer.Instance.StoneMaterial);
-                    break;    
-                case VoxelType.Dirt:
-                    childModel.SetMaterial(0,CubePlacer.Instance.GrassMaterial);
-                    break;
+                
+                    Actor actor = new EmptyActor();
+                    var model = Content.CreateVirtualAsset<Model>();
+                    model.SetupLODs([1]);
+                    model.LODs[0].Meshes[0].UpdateMesh(chunkPart.Value.vertices,chunkPart.Value.triangles,null,null,chunkPart.Value.uvs);
+                    var childModel = actor.GetOrAddChild<StaticModel>();
+                    childModel.Model = model;
+                    childModel.LocalScale = new Float3(100);
+                    switch (chunkPart.Key)
+                    {
+                        case VoxelType.Stone:
+                            childModel.SetMaterial(0, CubePlacer.Instance.StoneMaterial);
+                            break;    
+                        case VoxelType.Dirt:
+                            childModel.SetMaterial(0,CubePlacer.Instance.GrassMaterial);
+                            break;
+                    }
+                    models.Add(model);
+                    actor.Parent = parent;
+                    actor.Name=chunkPart.Key.ToString();
             }
-            models.Add(model);
-            actor.Parent = parent;
-            actor.Name=chunkPart.Key.ToString();
-        }
+        });
     }
     
     bool IsAir(int x, int y, int z)
