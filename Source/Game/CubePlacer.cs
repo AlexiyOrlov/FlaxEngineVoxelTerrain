@@ -24,11 +24,11 @@ public class CubePlacer : Script
     /// <inheritdoc/>
     public override void OnStart()
     {
-        for (int x = 0; x < 64; x++)
+        for (int x = 0; x < 128; x++)
         {
             for (int y = 0; y < 16; y++)
             {
-                for (int z = 0; z < 64; z++)
+                for (int z = 0; z < 128; z++)
                 {
                     VoxelType voxelType=DetermineVoxelType(x,y,z);
                     if(voxelType!=VoxelType.Air)
@@ -183,7 +183,7 @@ public class CubePlacer : Script
         float noise = Noise.CalcPixel3D(x, y, z, 0.03f);
         switch (noise)
         {
-            case < 64:
+            case < 98:
                 return VoxelType.Stone;
             case < 196:
                 return VoxelType.Dirt;
