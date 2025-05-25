@@ -6,14 +6,14 @@ namespace Game.Game;
 
 public class Chunk
 {
-    Int3 position;
-    public List<Model> models = new List<Model>();
+    Int3 _position;
+    public List<Model> Models = new List<Model>();
     public ConcurrentDictionary<VoxelType,ChunkPart> ChunkParts = new ConcurrentDictionary<VoxelType, ChunkPart>();
     private ConcurrentDictionary<Int3, VoxelType> voxelTypes = new();
 
     public Chunk(Int3 position)
     {
-        this.position = position;
+        this._position = position;
     }
 
     public void Initialize(Actor parent)
@@ -21,11 +21,11 @@ public class Chunk
         //generate voxel types
         for (int x = 0; x < 16; x++)
         {
-            for (int y = 0; y < CubePlacer.ChunkHeight; y++)
+            for (int y = 0; y < World.ChunkHeight; y++)
             {
                 for (int z = 0; z < 16; z++)
                 {
-                    Int3 voxelPosition =new Int3(position.X * 16 + x, position.Y * CubePlacer.ChunkHeight + y, position.Z * 16 + z);
+                    Int3 voxelPosition =new Int3(_position.X * 16 + x, _position.Y * World.ChunkHeight + y, _position.Z * 16 + z);
                     VoxelType voxelType=DetermineVoxelType(voxelPosition.X,voxelPosition.Y,voxelPosition.Z);
                     
                     voxelTypes.TryAdd(new Int3(x,y,z),voxelType);
@@ -35,12 +35,12 @@ public class Chunk
 
         for (int xInChunk = 0; xInChunk < 16; xInChunk++)
         {
-            for (int yInChunk = 0; yInChunk < CubePlacer.ChunkHeight; yInChunk++)
+            for (int yInChunk = 0; yInChunk < World.ChunkHeight; yInChunk++)
             {
                 for (int zInChunk = 0; zInChunk < 16; zInChunk++)
                 {
                     VoxelType voxelType = voxelTypes[new Int3(xInChunk, yInChunk, zInChunk)];
-                    Int3 voxelPosition =new Int3(position.X * 16 + xInChunk, position.Y * CubePlacer.ChunkHeight + yInChunk, position.Z * 16 + zInChunk);
+                    Int3 voxelPosition =new Int3(_position.X * 16 + xInChunk, _position.Y * World.ChunkHeight + yInChunk, _position.Z * 16 + zInChunk);
                     if(voxelType!=VoxelType.Air)
                     {
                         ChunkPart chunkPart=ChunkParts.GetOrAdd(voxelType,new ChunkPart());
@@ -78,13 +78,13 @@ public class Chunk
                     switch (chunkPart.Key)
                     {
                         case VoxelType.Stone:
-                            childModel.SetMaterial(0, CubePlacer.Instance.StoneMaterial);
+                            childModel.SetMaterial(0, World.Instance.StoneMaterial);
                             break;    
                         case VoxelType.Dirt:
-                            childModel.SetMaterial(0,CubePlacer.Instance.GrassMaterial);
+                            childModel.SetMaterial(0,World.Instance.GrassMaterial);
                             break;
                     }
-                    models.Add(model);
+                    Models.Add(model);
                     actor.Parent = parent;
                     actor.Name=chunkPart.Key.ToString();
             }
@@ -93,7 +93,7 @@ public class Chunk
     
     bool IsAir(int x, int y, int z)
     {
-        if (x < 0 || x > 15 || y < 0 || y > CubePlacer.ChunkHeight-1 || z < 0 || z > 15)
+        if (x < 0 || x > 15 || y < 0 || y > World.ChunkHeight-1 || z < 0 || z > 15)
         {
             //TODO fix
             // Float3 globalPosition = new Float3(position.X + x, position.Y + y, position.Z + z);

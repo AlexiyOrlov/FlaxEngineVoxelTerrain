@@ -8,13 +8,13 @@ using FlaxEngine.Utilities;
 
 namespace Game.Game;
 
-public class CubePlacer : Script
+public class World : Script
 {
     public MaterialBase StoneMaterial,GrassMaterial;
-    ConcurrentDictionary<Int3,Chunk> chunks = new ConcurrentDictionary<Int3, Chunk>();
+    ConcurrentDictionary<Int3,Chunk> _chunks = new ConcurrentDictionary<Int3, Chunk>();
 
     public const int ChunkHeight = 16;
-    public static CubePlacer Instance;
+    public static World Instance;
     [Tooltip("Generate N chunks along X")]
     public int ChunksX;
     [Tooltip("Generate N chunks along Z")]
@@ -24,7 +24,7 @@ public class CubePlacer : Script
     public int ChunkLoadRange = 16;
     [Tooltip("In chunks")]
     public int WorldHeight = 4;
-    private bool runGenerationThread = true;
+    private bool _runGenerationThread = true;
     
     /// <inheritdoc/>
     public override void OnStart()
@@ -58,7 +58,7 @@ public class CubePlacer : Script
 
         JobSystem.Dispatch(arg0 =>
         {
-            while (runGenerationThread)
+            while (_runGenerationThread)
             {
                 var playerChunkPosition = PosToChunkCoordinate(Player.Position);
                 LoadChunksAround(playerChunkPosition);
@@ -93,11 +93,11 @@ public class CubePlacer : Script
                 for (int cy = -3; cy <= 3; cy++)
                 {
                     Int3 chunkPosition = new Int3(position.X + cx, Mathf.Clamp(position.Y + cy,0,WorldHeight), position.Z + cz);
-                    if (!chunks.ContainsKey(chunkPosition))
+                    if (!_chunks.ContainsKey(chunkPosition))
                     {
                         Chunk chunk = new Chunk(chunkPosition);
                         chunk.Initialize(Actor);
-                        chunks.TryAdd(chunkPosition, chunk);
+                        _chunks.TryAdd(chunkPosition, chunk);
                     }
                 }
             }
@@ -106,8 +106,8 @@ public class CubePlacer : Script
 
     public override void OnDestroy()
     {
-        runGenerationThread = false;
-        chunks.ForEach(pair => pair.Value.models.ForEach(model => Destroy(model)));
+        _runGenerationThread = false;
+        _chunks.ForEach(pair => pair.Value.Models.ForEach(model => Destroy(model)));
     }
 
     public Int3 PosToChunkCoordinate(Float3 pos)
@@ -117,6 +117,6 @@ public class CubePlacer : Script
 
     public Chunk GetChunkAt(Float3 globalPosition)
     {
-        return chunks.GetValueOrDefault(PosToChunkCoordinate(globalPosition));
+        return _chunks.GetValueOrDefault(PosToChunkCoordinate(globalPosition));
     }
 }
