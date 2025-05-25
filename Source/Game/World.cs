@@ -13,7 +13,7 @@ public class World : Script
     public MaterialBase StoneMaterial,GrassMaterial;
     ConcurrentDictionary<Int3,Chunk> _chunks = new ConcurrentDictionary<Int3, Chunk>();
 
-    public const int ChunkHeight = 16;
+    public int ChunkHeight = 16;
     public static World Instance;
     [Tooltip("Generate N chunks along X")]
     public int ChunksX;
