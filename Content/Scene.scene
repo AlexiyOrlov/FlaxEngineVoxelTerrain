@@ -148,7 +148,8 @@
 	"GrassMaterial": "8391b6da40053a988a0959ab9f26f700",
 	"ChunksX": 16,
 	"ChunksZ": 16,
-	"Player": "b0d72c3746caebca055e1f921ca21c7c"
+	"Player": "b0d72c3746caebca055e1f921ca21c7c",
+	"ChunkLoadRange": 2
 }
 		},
 		{

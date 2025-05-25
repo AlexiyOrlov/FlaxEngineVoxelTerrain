@@ -20,25 +20,30 @@ public class CubePlacer : Script
     [Tooltip("Generate N chunks along Z")]
     public int ChunksZ;
     public Actor Player;
+
+    public int ChunkLoadRange = 16;
+    [Tooltip("In chunks")]
+    public int WorldHeight = 4;
     
     /// <inheritdoc/>
     public override void OnStart()
     {
         Instance = this;
-        for (int x = 0; x<ChunksX; x++)
-        {
-            for (int z = 0; z < ChunksZ; z++)
-            {
-                for (int y = 0; y < 1; y++)
-                {
-                    var position = new Int3(x,y,z);
-                    Chunk chunk = new Chunk(position);
-                    chunk.Initialize(Actor);
+        // for (int x = 0; x<ChunksX; x++)
+        // {
+        //     for (int z = 0; z < ChunksZ; z++)
+        //     {
+        //         for (int y = 0; y < 1; y++)
+        //         {
+        //             var position = new Int3(x,y,z);
+        //             Chunk chunk = new Chunk(position);
+        //             chunk.Initialize(Actor);
+        //
+        //             chunks.TryAdd(position,chunk);
+        //         }
+        //     }
+        // }
         
-                    chunks.TryAdd(position,chunk);
-                }
-            }
-        }
         
         // var next=new Int3(1,0,0);
         // var nextChunk=new Chunk(next);
@@ -66,7 +71,28 @@ public class CubePlacer : Script
     /// <inheritdoc/>
     public override void OnUpdate()
     {
-        // Here you can add code that needs to be called every frame
+        var playerChunkPosition = PosToChunkCoordinate(Player.Position);
+        LoadChunksAround(playerChunkPosition);
+    }
+
+    private void LoadChunksAround(Int3 position)
+    {
+        for (int cx = -ChunkLoadRange; cx <= ChunkLoadRange; cx++)
+        {
+            for (int cz = -ChunkLoadRange; cz <= ChunkLoadRange; cz++)
+            {
+                for (int cy = -3; cy <= 3; cy++)
+                {
+                    Int3 chunkPosition = new Int3(position.X + cx, Mathf.Clamp(position.Y + cy,0,WorldHeight), position.Z + cz);
+                    if (!chunks.ContainsKey(chunkPosition))
+                    {
+                        Chunk chunk = new Chunk(chunkPosition);
+                        chunk.Initialize(Actor);
+                        chunks.TryAdd(chunkPosition, chunk);
+                    }
+                }
+            }
+        }
     }
 
     public override void OnDestroy()
@@ -79,7 +105,7 @@ public class CubePlacer : Script
 
     public Int3 PosToChunkCoordinate(Float3 pos)
     {
-        return new Int3(Mathf.FloorToInt(pos.X / 16f), Mathf.FloorToInt(pos.Y/ChunkHeight), Mathf.FloorToInt(pos.Z / 16f));
+        return new Int3(Mathf.FloorToInt(pos.X/100 / 16), Mathf.FloorToInt(pos.Y/100/ChunkHeight), Mathf.FloorToInt(pos.Z/100 / 16));
     }
 
     public Chunk GetChunkAt(Float3 globalPosition)
