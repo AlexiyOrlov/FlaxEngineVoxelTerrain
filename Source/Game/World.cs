@@ -25,13 +25,13 @@ public class World : Script
     [Tooltip("In chunks")]
     public int WorldHeight = 4;
     private bool _runGenerationThread = true;
+    private long _genThreadLabel;
     
     /// <inheritdoc/>
     public override void OnStart()
     {
         Instance = this;
-
-        JobSystem.Dispatch(arg0 =>
+        _genThreadLabel=JobSystem.Dispatch(arg0 =>
         {
             while (_runGenerationThread)
             {
@@ -67,14 +67,18 @@ public class World : Script
         {
             for (int cz = -ChunkLoadRange; cz <= ChunkLoadRange; cz++)
             {
-                for (int cy = 0; cy <= WorldHeight; cy++)
+                if (_runGenerationThread)
                 {
-                    Int3 chunkPosition = new Int3(position.X + cx, Mathf.Clamp(position.Y + cy,0,WorldHeight), position.Z + cz);
-                    if (!_chunks.ContainsKey(chunkPosition))
+                    for (int cy = 0; cy <= WorldHeight; cy++)
                     {
-                        Chunk chunk = new Chunk(chunkPosition);
-                        chunk.Initialize(Actor);
-                        _chunks.TryAdd(chunkPosition, chunk);
+                        Int3 chunkPosition = new Int3(position.X + cx, Mathf.Clamp(position.Y + cy, 0, WorldHeight),
+                            position.Z + cz);
+                        if (!_chunks.ContainsKey(chunkPosition))
+                        {
+                            Chunk chunk = new Chunk(chunkPosition);
+                            chunk.Initialize(Actor);
+                            _chunks.TryAdd(chunkPosition, chunk);
+                        }
                     }
                 }
             }
@@ -93,6 +97,7 @@ public class World : Script
     public override void OnDestroy()
     {
         _runGenerationThread = false;
+        JobSystem.Wait(_genThreadLabel);
         _chunks.ForEach(pair => pair.Value.Models.ForEach(model => Destroy(model)));
     }
 
