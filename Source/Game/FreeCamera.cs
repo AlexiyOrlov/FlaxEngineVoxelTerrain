@@ -34,9 +34,10 @@ public class FreeCamera : Script
         var inputV = Input.GetAxis("Vertical");
         var jump=Input.GetAxis("VerticalMove");
         
-        Vector3 move= new Vector3(inputH,-jump, inputV)*MoveSpeed;
+        Vector3 move= new Vector3(inputH*MoveSpeed,-jump*MoveSpeed/2, inputV*MoveSpeed);
         var actorTransform=Actor.Transform;
-        actorTransform.Orientation=Quaternion.Euler(pitch,yaw,0);
+        var camFactor = Mathf.Saturate(CameraSmoothing * Time.DeltaTime);
+        actorTransform.Orientation = Quaternion.Lerp(actorTransform.Orientation, Quaternion.Euler(pitch, yaw, 0), camFactor);
         var vecTransformed=actorTransform.TransformDirection(move);
         actorTransform.Translation+=vecTransformed;
         Actor.Transform=actorTransform;
