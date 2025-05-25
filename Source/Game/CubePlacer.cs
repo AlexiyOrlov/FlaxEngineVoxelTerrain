@@ -29,11 +29,21 @@ public class CubePlacer : Script
                     var position = new Int3(x,y,z);
                     Chunk chunk = new Chunk(position);
                     chunk.Initialize(Actor);
-
+        
                     chunks.TryAdd(position,chunk);
                 }
             }
         }
+        
+        // var next=new Int3(1,0,0);
+        // var nextChunk=new Chunk(next);
+        // nextChunk.Initialize(Actor);
+        // chunks.TryAdd(next,nextChunk);
+        //
+        // var last = new Int3(1, 0, 1);
+        // var lastChunk=new Chunk(last);
+        // lastChunk.Initialize(Actor);
+        // chunks.TryAdd(last,lastChunk);
     }
     
     /// <inheritdoc/>

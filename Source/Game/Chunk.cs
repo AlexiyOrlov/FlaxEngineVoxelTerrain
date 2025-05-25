@@ -86,11 +86,21 @@ public class Chunk
             actor.Name=chunkPart.Key.ToString();
         }
     }
-
+    
     bool IsAir(int x, int y, int z)
     {
-        if(x<0 || x>15 || y<0 || y>15 || z<0 || z>15)
-            return true; //TODO check nearby chunk
+        if (x < 0 || x > 15 || y < 0 || y > CubePlacer.ChunkHeight-1 || z < 0 || z > 15)
+        {
+            //TODO fix
+            // Float3 globalPosition = new Float3(position.X + x, position.Y + y, position.Z + z);
+            // Chunk neighborChunk = CubePlacer.Instance.GetChunkAt(globalPosition);
+            // if (neighborChunk != null)
+            // {
+            //     Int3 neighborVoxelPosition = new Int3(x<0?15:x>15?0:x,y<0 ? CubePlacer.ChunkHeight-1: y>CubePlacer.ChunkHeight-1?0:y, z<0?15:z>15?0:z);
+            //     return neighborChunk.voxelTypes[neighborVoxelPosition]==VoxelType.Air;
+            // }
+            return true;
+        }
         return voxelTypes[new Int3(x,y,z)]==VoxelType.Air;
     }
     
