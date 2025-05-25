@@ -79,22 +79,19 @@ public class World : Script
     private void LoadChunksAround(Int3 position)
     {
         //parallelization is slow here
-        // Parallel.For(-ChunkLoadRange, ChunkLoadRange, cx =>
-        // {
-            for (int cx = -ChunkLoadRange; cx <= ChunkLoadRange; cx++)
+        for (int cx = -ChunkLoadRange; cx <= ChunkLoadRange; cx++)
+        {
+            for (int cz = -ChunkLoadRange; cz <= ChunkLoadRange; cz++)
             {
-                for (int cz = -ChunkLoadRange; cz <= ChunkLoadRange; cz++)
+                if (_runGenerationThread)
                 {
-                    if (_runGenerationThread)
+                    for (int cy = 0; cy <= WorldHeight; cy++)
                     {
-                        for (int cy = 0; cy <= WorldHeight; cy++)
-                        {
-                            CreateChunk(position, cx, cy, cz);
-                        }
+                        CreateChunk(position, cx, cy, cz);
                     }
                 }
             }
-        // });
+        }
     }
 
     private void CreateChunk(Int3 position, int cx, int cy, int cz)
