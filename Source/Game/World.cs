@@ -66,7 +66,7 @@ public class World : Script
         {
             for (int cz = -ChunkLoadRange; cz <= ChunkLoadRange; cz++)
             {
-                for (int cy = -3; cy <= 3; cy++)
+                for (int cy = 0; cy <= WorldHeight; cy++)
                 {
                     Int3 chunkPosition = new Int3(position.X + cx, Mathf.Clamp(position.Y + cy,0,WorldHeight), position.Z + cz);
                     if (!_chunks.ContainsKey(chunkPosition))
@@ -86,7 +86,6 @@ public class World : Script
         {
             Int3 chunkPosition = keyValuePair.Key;
             var distanceSquared = Float3.DistanceSquared(new Float3(chunkPosition.X,chunkPosition.Y,chunkPosition.Z), new Float3(position.X,position.Y,position.Z));
-            
         }
     }
 

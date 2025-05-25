@@ -22,12 +22,13 @@ public class Chunk
         //generate voxel types
         for (int x = 0; x < 16; x++)
         {
-            for (int y = 0; y < World.ChunkHeight; y++)
+            for (int z = 0; z < 16; z++)
             {
-                for (int z = 0; z < 16; z++)
+                for (int y = 0; y < World.ChunkHeight; y++)
                 {
                     Int3 voxelPosition =new Int3(_position.X * 16 + x, _position.Y * World.ChunkHeight + y, _position.Z * 16 + z);
-                    VoxelType voxelType=DetermineVoxelType(voxelPosition.X,voxelPosition.Y,voxelPosition.Z);
+                    float heightNoise=Noise.CalcPixel2D(voxelPosition.X,voxelPosition.Z,0.02f)/256*World.ChunkHeight;
+                    VoxelType voxelType=DetermineVoxelType(voxelPosition.X,voxelPosition.Y,voxelPosition.Z,heightNoise);
                     
                     voxelTypes.TryAdd(new Int3(x,y,z),voxelType);
                 }
@@ -110,8 +111,13 @@ public class Chunk
         return voxelTypes[new Int3(x,y,z)]==VoxelType.Air;
     }
     
-    VoxelType DetermineVoxelType(int x, int y, int z)
+    VoxelType DetermineVoxelType(int x, int y, int z,float heightNoise)
     {
+        //TODO
+        // if (y > heightNoise)
+        // {
+        //     return VoxelType.Air;
+        // }
         float noise = Noise.CalcPixel3D(x, y, z, 0.03f);
         switch (noise)
         {
