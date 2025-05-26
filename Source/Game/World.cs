@@ -25,8 +25,8 @@ public class World : Script
     public int ChunkLoadRange = 16;
     [Tooltip("In chunks")]
     public int WorldHeight = 4;
-    private bool _runGenerationThread = true;
-    private long _genThreadLabel=-1;
+    private bool _runGenerationThread = true,_runUnloadThread=true;
+    private long _genThreadLabel=-1,_unloadThreadLabel=-1;
     
     /// <inheritdoc/>
     public override void OnStart()
@@ -41,6 +41,14 @@ public class World : Script
                 UnloadChunksAround(playerChunkPosition);
             }
         });
+        // _unloadThreadLabel = JobSystem.Dispatch(arg0 =>
+        // {
+        //     while (_runUnloadThread)
+        //     {
+        //         var playerChunkPosition = PosToChunkCoordinate(Player.Position);
+        //         UnloadChunksAround(playerChunkPosition);
+        //     }
+        // });
         // MakeChunksTest(PosToChunkCoordinate(Player.Position));
     }
 
@@ -124,8 +132,11 @@ public class World : Script
     public override void OnDestroy()
     {
         _runGenerationThread = false;
+        _runUnloadThread = false;
         if(_genThreadLabel!=-1)
             JobSystem.Wait(_genThreadLabel);
+        if(_unloadThreadLabel!=-1)
+            JobSystem.Wait(_unloadThreadLabel);
         _chunks.ForEach(pair => pair.Value.Models.ForEach(model => Destroy(model)));
     }
 
