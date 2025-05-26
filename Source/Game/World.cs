@@ -38,7 +38,7 @@ public class World : Script
             {
                 var playerChunkPosition = PosToChunkCoordinate(Player.Position);
                 LoadChunksAround(playerChunkPosition);
-                // UnloadChunksAround(playerChunkPosition);
+                UnloadChunksAround(playerChunkPosition);
             }
         });
         // MakeChunksTest(PosToChunkCoordinate(Player.Position));
@@ -112,10 +112,9 @@ public class World : Script
         foreach (var keyValuePair in _chunks)
         {
             Int3 chunkPosition = keyValuePair.Key;
-            var distance = Float3.DistanceSquared(new Float3(chunkPosition.X,chunkPosition.Y,chunkPosition.Z), new Float3(position.X,position.Y,position.Z));
-            if (distance > ChunkLoadRange)
+            var distance = Int3.DistanceSquared(chunkPosition, position);
+            if (distance > ChunkLoadRange*ChunkLoadRange)
             {
-                Debug.Log($"Deleting {chunkPosition}");
                 keyValuePair.Value.Models.ForEach(model => Destroy(model));
                 _chunks.TryRemove(chunkPosition, out _);
             }
